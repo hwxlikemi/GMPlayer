@@ -11,14 +11,18 @@ jobs:
       - name: 🚀 检出代码
         uses: actions/checkout@v4
 
-      - name: 📦 设置 Node.js
+      - name: 📦 设置 Node.js 和 pnpm
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'pnpm'
 
       - name: 📥 安装 pnpm
-        run: npm install -g pnpm
+        run: |
+          corepack enable  # 启用 corepack（pnpm 需要）
+          npm install -g pnpm
+          echo "$(pnpm root -g)/bin" >> $GITHUB_PATH  # 确保 pnpm 在 PATH 中
+          pnpm --version  # 确认安装成功
 
       - name: 📦 安装依赖
         run: pnpm install
